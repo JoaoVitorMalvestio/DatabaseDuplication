@@ -5,13 +5,10 @@ import Models.Person;
 import Enum.RouterEnum;
 import Models.Subscriber;
 import Threads.Message;
-import com.sun.xml.internal.ws.addressing.WsaActionUtil;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +37,7 @@ public class Main {
                 Socket clientSocket = listenSocket.accept();
                 DataInputStream in = new DataInputStream(clientSocket.getInputStream());
                 String data = in.readUTF();
-                new Message(data,clientSocket);
+                new Message(data, clientSocket, routerEnum);
             }
         } catch(IOException e) {
             System.out.println("Accept");

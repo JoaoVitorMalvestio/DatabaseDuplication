@@ -3,6 +3,7 @@ package Threads;
 import Enum.ClientType;
 import Enum.Operation;
 import Enum.RouterEnum;
+import Enum.Action;
 import Models.Backup;
 import Models.Request;
 import Models.Subscriber;
@@ -13,21 +14,23 @@ import java.net.Socket;
 
 public class Message extends Thread{
     private final String data;
+    private final RouterEnum from;
     private final Socket clientSocket;
 
-    public Message(String data, Socket clientSocket) {
+    public Message(String data, Socket clientSocket, RouterEnum from) {
         this.data = data;
         this.clientSocket = clientSocket;
+        this.from = from;
         this.start();
     }
 
-    private static void resolveClient(Request request, Socket socket) {
-        if (request.getMessage().equals("Initialize")) {
-            System.out.println("Conectado a um novo socket de client " + RouterEnum.valueOf(request.getFrom()).description);
+    private static void resolveClient(Request request, Socket socket, RouterEnum from) {
+        if (request.getAction() == Action.INITIALIZE) {
+            System.out.println("["+from.description+"] "+"Conectado a um novo socket de client " + RouterEnum.valueOf(request.getFrom()).description);
             Main.subscribers.add(new Subscriber(RouterEnum.valueOf(request.getFrom()).name() ,socket));
             new ReceiveMessage(socket, RouterEnum.valueOf(request.getFrom()));
         }
-        //        SendService sendService = new SendService();
+//        SendService sendService = new SendService();
 //        if(request.getType().name().equals(ClientType.SUBSCRIBER.name())){
 //            System.out.println("Criado novo Inscrito: "+request.getFrom()+" Interesse: "+request.getInterest());
 //            Subscriber subscriber = new Subscriber(request.getFrom(), request.getInterest(), socket);
@@ -43,10 +46,10 @@ public class Message extends Thread{
 //        }
     }
 
-    static void resolveBackup(Request request, Socket socket) {
+    static void resolveBackup(Request request, Socket socket, RouterEnum from) {
 //        SendService sendService = new SendService();
-        if (request.getMessage().equals("Initialize")) {
-            System.out.println("Conectado a um novo socket backup: " + RouterEnum.valueOf(request.getFrom()).description);
+        if (request.getAction() == Action.INITIALIZE) {
+            System.out.println("["+from.description+"] "+"Conectado a um novo socket backup: " + RouterEnum.valueOf(request.getFrom()).description);
             Main.backups.add(new Backup(RouterEnum.valueOf(request.getFrom()).name() ,socket));
             new ReceiveMessage(socket, RouterEnum.valueOf(request.getFrom()));
         }
@@ -77,13 +80,13 @@ public class Message extends Thread{
             }
 
             if(request.getType().name().equals(ClientType.BACKUP.name())) {
-                resolveBackup(request, this.clientSocket);
-                out.writeUTF(Request.send(request.getType(),request.getInterest(),request.getMessage(),request.getFrom(),request.getTo(),Operation.RESPONSE));
+                resolveBackup(request, this.clientSocket, this.from);
+                out.writeUTF(Request.send(request.getType(),request.getAction(),request.getData(),request.getFrom(),request.getTo(),Operation.RESPONSE));
                 return;
             }
 
-            resolveClient(request, clientSocket);
-            out.writeUTF(Request.send(request.getType(),request.getInterest(),request.getMessage(),request.getFrom(),request.getTo(),Operation.RESPONSE));
+            resolveClient(request, clientSocket, this.from);
+            out.writeUTF(Request.send(request.getType(),request.getAction(),request.getData(),request.getFrom(),request.getTo(),Operation.RESPONSE));
         }catch (IOException e){
             System.out.println("Message");
             System.out.println(e.getMessage());

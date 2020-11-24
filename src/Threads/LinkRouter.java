@@ -2,18 +2,21 @@ package Threads;
 
 import Enum.Operation;
 import Enum.RouterEnum;
+import Enum.Action;
 import Models.Request;
 import Service.SocketService;
 import java.io.IOException;
 
 public class LinkRouter extends Thread {
 
-    private RouterEnum linkRouter;
+    private RouterEnum to;
+    private RouterEnum from;
     private SocketService socketService;
     private Request request;
 
-    public LinkRouter(RouterEnum linkRouter, SocketService socketService) {
-        this.linkRouter = linkRouter;
+    public LinkRouter(RouterEnum to, SocketService socketService, RouterEnum from) {
+        this.to = to;
+        this.from = from;
         this.socketService = socketService;
         this.start();
     }
@@ -23,12 +26,12 @@ public class LinkRouter extends Thread {
             while (!socketService.isClosed()) {
                 request = new Request(socketService.receive());
                 if (request.getOperation().equals(Operation.REQUEST)) {
-                    System.out.println("Chegou Request: " + linkRouter.description + " link router: " + request.getMessage());
+                    System.out.println("Chegou Request: " + to.description + " link router: " + request.getData());
                 }
                 if (request.getOperation().equals(Operation.RESPONSE)) {
 //                    System.out.println("Chegou Resposta: " + linkRouter.description + " link router: " + request.getMessage());
-                    if (request.getMessage().equals("Initialize")) {
-                        System.out.println("O socket " + linkRouter.description + " se conectou com o socket " + RouterEnum.valueOf(request.getFrom()).description);
+                    if (request.getAction() == Action.INITIALIZE) {
+                        System.out.println("["+RouterEnum.valueOf(request.getFrom()).description+"] "+"O socket " + to.description + " aceitou a conexão ");
                     }
                     continue;
                 }
@@ -44,7 +47,8 @@ public class LinkRouter extends Thread {
 //                }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("O socket "+ this.to.description  + " se desconectou");
+            System.out.println("Desligando o "+ from.description+" ...");
         }
     }
 }

@@ -3,6 +3,7 @@ package API;
 import Enum.RouterEnum;
 import Enum.ClientType;
 import Enum.Operation;
+import Enum.Action;
 import Models.Request;
 import Service.SocketService;
 import Threads.LinkRouter;
@@ -22,7 +23,7 @@ public class Main {
             routerEnum = RouterEnum.valueOf(args[0]);
             listenSocket = new ServerSocket(routerEnum.routerPort);
             linkWithRouter();
-            acceptConnections();
+//            acceptConnections();
         } catch(IOException e) {
             System.out.println("Listen:"+e.getMessage());
         }
@@ -33,14 +34,14 @@ public class Main {
             SocketService socketService = new SocketService();
             try{
                 socketService.startSocket(linkRouter.routerPort);
-                socketService.send(Request.send(ClientType.API, "", "Initialize", API.Main.routerEnum.name(), linkRouter.name(), Operation.REQUEST));
+                socketService.send(Request.send(ClientType.API, Action.INITIALIZE, "", API.Main.routerEnum.name(), linkRouter.name(), Operation.REQUEST));
             }catch (ConnectException e){
                 System.out.println("["+routerEnum.description+"] "+"Não foi possível conectar no socket: "+ linkRouter.description);
                 return;
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            new LinkRouter(linkRouter, socketService);
+            new LinkRouter(linkRouter, socketService, routerEnum);
         }
     }
 
@@ -50,7 +51,7 @@ public class Main {
                 Socket clientSocket = listenSocket.accept();
                 DataInputStream in = new DataInputStream(clientSocket.getInputStream());
                 String data = in.readUTF();
-                new Message(data, clientSocket);
+                new Message(data, clientSocket, routerEnum);
             }
         } catch(IOException e) {
             System.out.println("Listen:"+e.getMessage());

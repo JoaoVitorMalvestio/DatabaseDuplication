@@ -2,19 +2,20 @@ package Models;
 
 import Enum.ClientType;
 import Enum.Operation;
+import Enum.Action;
 
 public class Request {
     private ClientType type;
-    private String interest;
-    private String message;
+    private Action action;
+    private String data;
     private String from;
     private String to;
     private Operation operation;
 
-    public Request(ClientType type, String interest, String message, String from, String to, Operation operation) {
+    public Request(ClientType type, Action action, String data, String from, String to, Operation operation) {
         this.type = type;
-        this.interest = interest;
-        this.message = message;
+        this.action = action;
+        this.data = data;
         this.from = from;
         this.to = to;
         this.operation = operation;
@@ -26,25 +27,25 @@ public class Request {
         this.type = ClientType.valueOf(requestArray[0]);
         this.to = requestArray[1];
         this.from = requestArray[2];
-        this.interest = requestArray[3];
-        this.message = requestArray[4];
+        this.action = Action.valueOf(requestArray[3]);
+        this.data = requestArray[4];
         this.operation = Operation.valueOf(requestArray[5]);
     }
 
-    public static String send(ClientType type, String interest, String message, String from, String to, Operation operation){
-        return type.name()+"|"+to+"|"+from+"|"+interest+"|"+message+"|"+operation.name();
+    public static String send(ClientType type, Action action, String data, String from, String to, Operation operation){
+        return type.name()+"|"+to+"|"+from+"|"+action+"|"+data+"|"+operation.name();
     }
 
     public ClientType getType() {
         return type;
     }
 
-    public String getInterest() {
-        return interest;
+    public Action getAction() {
+        return action;
     }
 
-    public String getMessage() {
-        return message;
+    public String getData() {
+        return data;
     }
 
     public String getFrom() {
@@ -63,8 +64,8 @@ public class Request {
     public String toString() {
         return "Request{" +
                 "type=" + type +
-                ", interest='" + interest + '\'' +
-                ", message='" + message + '\'' +
+                ", action='" + action + '\'' +
+                ", data='" + data + '\'' +
                 ", from='" + from + '\'' +
                 ", to='" + to + '\'' +
                 ", operation=" + operation +

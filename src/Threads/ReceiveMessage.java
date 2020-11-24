@@ -23,7 +23,7 @@ public class ReceiveMessage extends Thread {
         try{
             while(!socket.isClosed()){
                 DataInputStream in = new DataInputStream(this.socket.getInputStream());
-                Message.resolveBackup(new Request(in.readUTF()), this.socket);
+                Message.resolveBackup(new Request(in.readUTF()), this.socket, this.routerEnum);
             }
         }catch (SocketException e){
             if(e.getMessage().equals("Connection reset")){
