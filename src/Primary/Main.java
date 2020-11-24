@@ -5,10 +5,13 @@ import Models.Person;
 import Enum.RouterEnum;
 import Models.Subscriber;
 import Threads.Message;
+import com.sun.xml.internal.ws.addressing.WsaActionUtil;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +43,9 @@ public class Main {
                 new Message(data,clientSocket);
             }
         } catch(IOException e) {
-            System.out.println("Listen:"+e.getMessage());
+            System.out.println("Accept");
+            System.out.println(e.getMessage());
+            System.out.println(e.getLocalizedMessage());
         }
     }
 }

@@ -22,10 +22,13 @@ public class LinkRouter extends Thread {
         try {
             while (!socketService.isClosed()) {
                 request = new Request(socketService.receive());
-                System.out.println("Recebeu informação de " + linkRouter.name() + " link router: " + request.getMessage());
+                if (request.getOperation().equals(Operation.REQUEST)) {
+                    System.out.println("Chegou Request: " + linkRouter.description + " link router: " + request.getMessage());
+                }
                 if (request.getOperation().equals(Operation.RESPONSE)) {
+//                    System.out.println("Chegou Resposta: " + linkRouter.description + " link router: " + request.getMessage());
                     if (request.getMessage().equals("Initialize")) {
-                        System.out.println("Socket inicializado com sucesso com o " + linkRouter.name());
+                        System.out.println("O socket " + linkRouter.description + " se conectou com o socket " + RouterEnum.valueOf(request.getFrom()).description);
                     }
                     continue;
                 }

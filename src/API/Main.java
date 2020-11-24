@@ -7,9 +7,9 @@ import Models.Request;
 import Service.SocketService;
 import Threads.LinkRouter;
 import Threads.Message;
-
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -21,6 +21,7 @@ public class Main {
         try{
             routerEnum = RouterEnum.valueOf(args[0]);
             listenSocket = new ServerSocket(routerEnum.routerPort);
+            linkWithRouter();
             acceptConnections();
         } catch(IOException e) {
             System.out.println("Listen:"+e.getMessage());
@@ -33,6 +34,9 @@ public class Main {
             try{
                 socketService.startSocket(linkRouter.routerPort);
                 socketService.send(Request.send(ClientType.API, "", "Initialize", API.Main.routerEnum.name(), linkRouter.name(), Operation.REQUEST));
+            }catch (ConnectException e){
+                System.out.println("["+routerEnum.description+"] "+"Não foi possível conectar no socket: "+ linkRouter.description);
+                return;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -46,7 +50,7 @@ public class Main {
                 Socket clientSocket = listenSocket.accept();
                 DataInputStream in = new DataInputStream(clientSocket.getInputStream());
                 String data = in.readUTF();
-                new Message(data,clientSocket);
+                new Message(data, clientSocket);
             }
         } catch(IOException e) {
             System.out.println("Listen:"+e.getMessage());

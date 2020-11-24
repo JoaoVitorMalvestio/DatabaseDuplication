@@ -21,12 +21,11 @@ public class Message extends Thread{
         this.start();
     }
 
-    private static void resolveClient(Request request, Socket socket) throws IOException {
-        if (request.getMessage().equals("Initialize")){
-            System.out.println("Conectado a um novo socket de client "+request.getFrom());
+    private static void resolveClient(Request request, Socket socket) {
+        if (request.getMessage().equals("Initialize")) {
+            System.out.println("Conectado a um novo socket de client " + RouterEnum.valueOf(request.getFrom()).description);
             Main.subscribers.add(new Subscriber(RouterEnum.valueOf(request.getFrom()).name() ,socket));
-            new ReceiveMessage(socket);
-            return;
+            new ReceiveMessage(socket, RouterEnum.valueOf(request.getFrom()));
         }
         //        SendService sendService = new SendService();
 //        if(request.getType().name().equals(ClientType.SUBSCRIBER.name())){
@@ -44,13 +43,12 @@ public class Message extends Thread{
 //        }
     }
 
-    static void resolveBackup(Request request, Socket socket) throws IOException {
+    static void resolveBackup(Request request, Socket socket) {
 //        SendService sendService = new SendService();
-        if (request.getMessage().equals("Initialize")){
-            System.out.println("Conectado a um novo socket de backup "+request.getFrom());
+        if (request.getMessage().equals("Initialize")) {
+            System.out.println("Conectado a um novo socket backup: " + RouterEnum.valueOf(request.getFrom()).description);
             Main.backups.add(new Backup(RouterEnum.valueOf(request.getFrom()).name() ,socket));
-            new ReceiveMessage(socket);
-            return;
+            new ReceiveMessage(socket, RouterEnum.valueOf(request.getFrom()));
         }
 //        RouterEnum from = RouterEnum.valueOf(request.getFrom());
 //        if(request.getType().equals(ClientType.PUBLISHER)){
@@ -87,7 +85,9 @@ public class Message extends Thread{
             resolveClient(request, clientSocket);
             out.writeUTF(Request.send(request.getType(),request.getInterest(),request.getMessage(),request.getFrom(),request.getTo(),Operation.RESPONSE));
         }catch (IOException e){
-            e.printStackTrace();
+            System.out.println("Message");
+            System.out.println(e.getMessage());
+            System.out.println(e.getLocalizedMessage());
         }
     }
 }

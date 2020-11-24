@@ -6,9 +6,8 @@ import Enum.Operation;
 import Models.Request;
 import Service.SocketService;
 import Threads.LinkRouter;
-
 import java.io.IOException;
-import java.net.ServerSocket;
+import java.net.ConnectException;
 
 public class Main {
     private static RouterEnum routerEnum;
@@ -24,8 +23,12 @@ public class Main {
             try{
                 socketService.startSocket(linkRouter.routerPort);
                 socketService.send(Request.send(ClientType.BACKUP, "", "Initialize", Main.routerEnum.name(), linkRouter.name(), Operation.REQUEST));
-            } catch (IOException e) {
+            }catch (ConnectException e){
+                System.out.println("["+routerEnum.description+"] "+"Não foi possível conectar no socket: "+ linkRouter.description);
+                return;
+            }catch (IOException e) {
                 e.printStackTrace();
+                return;
             }
             new LinkRouter(linkRouter, socketService);
         }
