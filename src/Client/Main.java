@@ -1,5 +1,7 @@
 package Client;
 
+import Client.View.ActionsView;
+import Client.View.ClientView;
 import Models.Request;
 import Service.SocketService;
 import Threads.LinkRouter;
@@ -12,8 +14,10 @@ public class Main {
     private static RouterEnum routerEnum;
 
     public static void main(String[] args) {
-        routerEnum = RouterEnum.valueOf(args[0]);
-        linkWithRouter();
+        //routerEnum = RouterEnum.valueOf(args[0]);
+        //linkWithRouter();
+
+        new ActionsView("DatabaseReplication");
     }
 
     private static void linkWithRouter() {
@@ -21,11 +25,11 @@ public class Main {
             SocketService socketService = new SocketService();
             try{
                 socketService.startSocket(linkRouter.routerPort);
-                socketService.send(Request.send(ClientType.CLIENT, "", "Initialize", Client.Main.routerEnum.name(), linkRouter.name(), Operation.REQUEST));
+                //socketService.send(Request.send(ClientType.CLIENT, "", "Initialize", Client.Main.routerEnum.name(), linkRouter.name(), Operation.REQUEST));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            new LinkRouter(linkRouter, socketService);
+            //new LinkRouter(linkRouter, socketService);
         }
     }
 }
