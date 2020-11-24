@@ -4,6 +4,7 @@ import Enum.RouterEnum;
 import Enum.ClientType;
 import Enum.Operation;
 import Enum.Action;
+import Models.Client;
 import Models.Request;
 import Service.SocketService;
 import Threads.LinkRouter;
@@ -13,17 +14,21 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Main {
     private static RouterEnum routerEnum;
     private static ServerSocket listenSocket;
+    public static ArrayList<Client> clients = new ArrayList<>();
+    private static ArrayList<LinkRouter> sockets;
 
     public static void main(String[] args) {
         try{
+            sockets = new ArrayList<>();
             routerEnum = RouterEnum.valueOf(args[0]);
             listenSocket = new ServerSocket(routerEnum.routerPort);
             linkWithRouter();
-//            acceptConnections();
+            acceptConnections();
         } catch(IOException e) {
             System.out.println("Listen:"+e.getMessage());
         }
@@ -41,7 +46,7 @@ public class Main {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            new LinkRouter(linkRouter, socketService, routerEnum);
+            sockets.add(new LinkRouter(linkRouter, socketService, routerEnum));
         }
     }
 

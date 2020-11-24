@@ -51,4 +51,21 @@ public class LinkRouter extends Thread {
             System.out.println("Desligando o "+ from.description+" ...");
         }
     }
+
+    public RouterEnum getTo() {
+        return to;
+    }
+
+    public RouterEnum getFrom() {
+        return from;
+    }
+
+    public SocketService getSocketService() {
+        return socketService;
+    }
+
+    public Request getRequest() {
+        return request;
+    }
+
 }

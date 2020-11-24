@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 import Enum.RouterEnum;
+import Enum.ClientType;
 
 public class ReceiveMessage extends Thread {
 
@@ -23,7 +24,15 @@ public class ReceiveMessage extends Thread {
         try{
             while(!socket.isClosed()){
                 DataInputStream in = new DataInputStream(this.socket.getInputStream());
-                Message.resolveBackup(new Request(in.readUTF()), this.socket, this.routerEnum);
+                String receive = in.readUTF();
+                System.out.println(receive);
+                Request request = new Request(receive);
+                if(request.getType() == ClientType.BACKUP) {
+                    Message.resolveBackup(request, this.socket, this.routerEnum);
+                }
+                if(request.getType() == ClientType.CLIENT) {
+                    Message.resolveClient(request, this.socket, this.routerEnum, RouterEnum.valueOf(request.getFrom()));
+                }
             }
         }catch (SocketException e){
             if(e.getMessage().equals("Connection reset")){

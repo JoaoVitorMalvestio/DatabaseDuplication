@@ -4,6 +4,8 @@ import Enum.ClientType;
 import Enum.Operation;
 import Enum.Action;
 
+import java.util.Arrays;
+
 public class Request {
     private ClientType type;
     private Action action;
@@ -58,6 +60,22 @@ public class Request {
 
     public Operation getOperation() {
         return operation;
+    }
+
+    public static Person decodeData(String data){
+        Person person = new Person();
+        String[] stringFields = data.split("$");
+        for (String fields: stringFields) {
+            String[] field = fields.split("=");
+            if(field[0].equals("name")){
+                person.setName(field[1]);
+            }
+        }
+        return person;
+    }
+
+    public static String encodeData(Person person){
+        return person.encodePerson();
     }
 
     @Override
