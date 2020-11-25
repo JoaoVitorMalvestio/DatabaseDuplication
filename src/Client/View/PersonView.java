@@ -5,7 +5,7 @@ import Models.Person;
 
 import javax.swing.*;
 
-public class NewPersonView extends JFrame {
+public class PersonView extends JFrame {
     private JPanel panelPerson;
     private JLabel labelPessoa;
     private JLabel labelName;
@@ -29,7 +29,7 @@ public class NewPersonView extends JFrame {
     private JButton btSalvar;
     private JButton btFechar;
 
-    public NewPersonView(String title) {
+    public PersonView(String title, Person person) {
         super(title);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,6 +39,12 @@ public class NewPersonView extends JFrame {
         this.setVisible(true);
 
         fieldId.disable();
+
+        clearPerson();
+
+        if (person.getId() != null){
+            setPerson(person);
+        }
 
         btSalvar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -51,6 +57,30 @@ public class NewPersonView extends JFrame {
                 btFecharMouseClicked(evt);
             }
         });
+    }
+
+    private void clearPerson(){
+        fieldId.setText("");
+        fieldName.setText("");
+        fieldAddress.setText("");
+        fieldCity.setText("");
+        fieldNeighborhood.setText("");
+        fieldNumberAddress.setText("");
+        fieldPhone.setText("");
+        fieldState.setText("");
+        fieldZipCode.setText("");
+    }
+
+    private void setPerson(Person person){
+        fieldId.setText(person.getId().toString());
+        fieldName.setText(person.getName());
+        fieldAddress.setText(person.getAddress());
+        fieldCity.setText(person.getCity());
+        fieldNeighborhood.setText(person.getNeighborhood());
+        fieldNumberAddress.setText(person.getNumberAddress());
+        fieldPhone.setText(person.getPhone());
+        fieldState.setText(person.getState());
+        fieldZipCode.setText(person.getZipCode());
     }
 
     private Person getPersonFromView(){
