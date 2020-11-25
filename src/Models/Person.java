@@ -86,7 +86,7 @@ public class Person {
         this.state = state;
     }
 
-    String encodePerson(){
+    public String encodePerson(){
         String string = "";
         if(id != null){
             string += ("id="+id.toString());
