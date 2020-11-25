@@ -5,6 +5,7 @@ import Enum.ClientType;
 import Enum.Operation;
 import Enum.Action;
 import Models.Client;
+import Models.Person;
 import Models.Primary;
 import Models.Request;
 import Service.SocketService;
@@ -16,12 +17,16 @@ import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     private static RouterEnum routerEnum;
     private static ServerSocket listenSocket;
     public static ArrayList<Client> clients = new ArrayList<>();
     public static Primary socketPrimary;
+    private static List<Person> list = new ArrayList<>();
+    public static boolean waitingResponse = false;
+    public static Request response;
 
     public static void main(String[] args) {
         try{

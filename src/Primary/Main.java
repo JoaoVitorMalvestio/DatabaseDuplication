@@ -3,6 +3,7 @@ package Primary;
 import Models.Backup;
 import Models.Person;
 import Enum.RouterEnum;
+import Models.Request;
 import Models.Subscriber;
 import Threads.Message;
 import java.io.DataInputStream;
@@ -19,6 +20,8 @@ public class Main {
     public static ArrayList<Backup> backups = new ArrayList<>();
     private static RouterEnum routerEnum;
     private static ServerSocket listenSocket;
+    public static boolean waitingResponse = false;
+    public static Request response;
 
 
     public static void main(String[] args) {

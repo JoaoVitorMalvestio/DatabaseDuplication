@@ -32,7 +32,7 @@ public class PersonView extends JFrame {
     public PersonView(String title, Person person) {
         super(title);
 
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(panelPerson);
         this.pack();
         this.setLocationRelativeTo(null);

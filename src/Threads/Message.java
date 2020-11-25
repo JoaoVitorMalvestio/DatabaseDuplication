@@ -120,7 +120,6 @@ public class Message extends Thread{
             DataOutputStream out = new DataOutputStream(this.clientSocket.getOutputStream());
 
             if(request.getOperation().equals(Operation.RESPONSE)){
-                System.out.println("[Message] Response: "+request);
                 return;
             }
             switch (request.getType()){
@@ -141,7 +140,6 @@ public class Message extends Thread{
                     System.out.println(request);
                     break;
             }
-            System.out.println("[Message] Send response");
             out.writeUTF(Request.send(request.getType(),request.getAction(),request.getData(),request.getFrom(),request.getTo(),Operation.RESPONSE));
         }catch (IOException e){
             System.out.println("Message");

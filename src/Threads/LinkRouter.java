@@ -30,7 +30,6 @@ public class LinkRouter extends Thread {
                 request = new Request(socketService.receive());
                 DataOutputStream out = new DataOutputStream(socketService.getSocket().getOutputStream());
                 if (request.getOperation().equals(Operation.RESPONSE)) {
-                    System.out.println("[Link-Router] Response: "+request);
                     if (request.getAction() == Action.INITIALIZE) {
                         System.out.println("O socket " + to.description + " aceitou a conexão ");
                         continue;
@@ -61,7 +60,6 @@ public class LinkRouter extends Thread {
                         System.out.println(request);
                         break;
                 }
-                System.out.println("[Link-Router] Send response");
                 out.writeUTF(Request.send(request.getType(),request.getAction(),request.getData(),request.getFrom(),request.getTo(),Operation.RESPONSE));
             }
         } catch (IOException e) {

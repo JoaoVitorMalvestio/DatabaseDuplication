@@ -49,7 +49,6 @@ public class ReceiveMessage extends Thread {
                         System.out.println("[RECEIVE-MESSAGE] Mensagem não tratada");
                         break;
                 }
-                System.out.println("[Receive-Message] Send response");
                 sendResponse(request);
             }
         }catch (SocketException e){
