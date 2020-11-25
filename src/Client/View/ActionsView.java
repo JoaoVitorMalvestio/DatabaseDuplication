@@ -15,5 +15,15 @@ public class ActionsView extends JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+
+        inserirNovaPessoaButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                inserirNovaPessoaButtonMouseClicked(evt);
+            }
+        });
+    }
+
+    private void inserirNovaPessoaButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        new NewPersonView("Cadastrar nova pessoa");
     }
 }

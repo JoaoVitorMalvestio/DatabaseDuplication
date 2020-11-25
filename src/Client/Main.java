@@ -38,13 +38,33 @@ public class Main {
             sockets.add(new LinkRouter(linkRouter, socketService, routerEnum));
         }
     }
-    private static boolean resolveInput(String option){
+
+    public static void createPerson(Person person){
+        try {
+            sockets.get(0).getSocketService().send(
+                    Request.send(
+                            ClientType.CLIENT,
+                            Action.INSERT,
+                            Request.encodeData(person),
+                            routerEnum.name(),
+                            sockets.get(0).getTo().name(),
+                            Operation.REQUEST
+                    )
+            );
+        } catch (IOException e) {
+            System.out.println("try catch client");
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean resolveInput(String option){
         if(option == null){
             JOptionPane.showMessageDialog(null, "Bye Bye...");
             return true;
         }
         switch (option){
-            case "1"/*Inserir*/:
+            /*Inserir*/
+            case "1":
                 System.out.println("Vai inserir");
                 Person person = new Person();
                 person.setName("Michel");
@@ -64,18 +84,27 @@ public class Main {
                     e.printStackTrace();
                 }
                 break;
-            case "2"/*Alterar*/:
+
+            /*Alterar*/
+            case "2":
                 System.out.println("Vai Alterar");
                 break;
-            case "3"/*Deletar*/:
+
+            /*Deletar*/
+            case "3":
                 System.out.println("Vai deletar");
                 break;
-            case "4"/*Listar*/:
+
+            /*Listar*/
+            case "4":
                 System.out.println("Vai Listar");
                 break;
-            case ""/*Vazio*/:
+
+            /*Vazio*/
+            case "":
                 System.out.println("Não selecionou nada");
                 break;
+
             default:
                 JOptionPane.showMessageDialog(null, "Bye Bye...");
                 return true;
