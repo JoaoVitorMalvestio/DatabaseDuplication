@@ -1,23 +1,31 @@
 package Models;
 
-import java.net.Socket;
 import Enum.RouterEnum;
+import Threads.LinkRouter;
 
-public class Backup {
+import java.net.Socket;
+
+public class Primary {
     private RouterEnum routerEnum;
     private Socket socket;
+    private LinkRouter linkRouter;
 
-    public Backup(RouterEnum routerEnum, Socket socket) {
+    public Primary(RouterEnum routerEnum, Socket socket, LinkRouter linkRouter) {
         this.routerEnum = routerEnum;
         this.socket = socket;
+        this.linkRouter = linkRouter;
     }
 
     public RouterEnum getRouterEnum() {
         return routerEnum;
     }
 
-    public void setRouterEnum(RouterEnum name) {
-        this.routerEnum = name;
+    public LinkRouter getLinkRouter() {
+        return linkRouter;
+    }
+
+    public void setLinkRouter(LinkRouter linkRouter) {
+        this.linkRouter = linkRouter;
     }
 
     public Socket getSocket() {

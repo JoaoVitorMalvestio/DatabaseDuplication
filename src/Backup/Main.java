@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Main {
     private static RouterEnum routerEnum;
-    private static List<Person> list = new ArrayList<>();
+    public static List<Person> list = new ArrayList<>();
 
     public static void main(String[] args) {
         routerEnum = RouterEnum.valueOf(args[0]);
@@ -29,7 +29,7 @@ public class Main {
                 socketService.startSocket(linkRouter.routerPort);
                 socketService.send(Request.send(ClientType.BACKUP, Action.INITIALIZE, "", Main.routerEnum.name(), linkRouter.name(), Operation.REQUEST));
             }catch (ConnectException e){
-                System.out.println("["+routerEnum.description+"] "+"Não foi possível conectar no socket: "+ linkRouter.description);
+                System.out.println("Não foi possível conectar no socket: "+ linkRouter.description);
                 return;
             }catch (IOException e) {
                 e.printStackTrace();

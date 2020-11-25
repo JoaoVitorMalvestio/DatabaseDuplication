@@ -1,5 +1,7 @@
 package Models;
 
+import java.util.Random;
+
 public class Person {
 
     private Integer id;
@@ -157,5 +159,9 @@ public class Person {
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
                 '}';
+    }
+
+    public void generateId(){
+        this.id = new Random().nextInt();
     }
 }

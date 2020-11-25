@@ -9,6 +9,13 @@ public class SocketService {
 
     private Socket socket;
 
+    public SocketService(Socket socket) {
+        this.socket = socket;
+    }
+
+    public SocketService() {
+    }
+
     public void startSocket(Integer port) throws IOException {
         this.socket = new Socket("localhost", port);
     }

@@ -11,12 +11,13 @@ import Enum.Action;
 import Enum.RouterEnum;
 import Enum.ClientType;
 import Enum.Operation;
-
 import javax.swing.*;
 
 public class Main {
     private static RouterEnum routerEnum;
     private static ArrayList<LinkRouter> sockets;
+    public static boolean waitingResponse = false;
+    public static Request response;
 
     public static void main(String[] args) {
         sockets = new ArrayList<>();
@@ -24,6 +25,7 @@ public class Main {
         linkWithRouter();
 
         new ActionsView("DatabaseReplication");
+//        menu();
     }
 
     private static void linkWithRouter() {
@@ -31,13 +33,29 @@ public class Main {
             SocketService socketService = new SocketService();
             try{
                 socketService.startSocket(linkRouter.routerPort);
-                socketService.send(Request.send(ClientType.CLIENT, Action.INITIALIZE, "", Client.Main.routerEnum.name(), linkRouter.name(), Operation.REQUEST));
+                socketService.send(Request.send(ClientType.CLIENT, Action.INITIALIZE, "", routerEnum.name(), linkRouter.name(), Operation.REQUEST));
             } catch (IOException e) {
                 e.printStackTrace();
             }
             sockets.add(new LinkRouter(linkRouter, socketService, routerEnum));
         }
     }
+
+    private static void menu(){
+        boolean leave = false;
+        while(!leave){
+            String option = JOptionPane.showInputDialog(
+                    null,
+                    "Digite: \n" +
+                            "1 - inserir\n" +
+                            "2 - Alterar\n" +
+                            "3 - Deletar\n" +
+                            "4 - Listar\n" +
+                            "5 - Sair");
+            leave = resolveInput(option);
+        }
+    }
+
     private static boolean resolveInput(String option){
         if(option == null){
             JOptionPane.showMessageDialog(null, "Bye Bye...");
@@ -45,7 +63,6 @@ public class Main {
         }
         switch (option){
             case "1"/*Inserir*/:
-                System.out.println("Vai inserir");
                 Person person = new Person();
                 person.setName("Michel");
                 try {
@@ -59,6 +76,9 @@ public class Main {
                                     Operation.REQUEST
                             )
                     );
+                    waitingResponse = true;
+                    waiting();
+                    System.out.println("Salvo com sucesso");
                 } catch (IOException e) {
                     System.out.println("try catch client");
                     e.printStackTrace();
@@ -80,7 +100,12 @@ public class Main {
                 JOptionPane.showMessageDialog(null, "Bye Bye...");
                 return true;
         }
-        System.out.println(option);
         return false;
+    }
+
+    public static void waiting(){
+        while (waitingResponse){
+
+        }
     }
 }
