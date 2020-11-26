@@ -20,7 +20,7 @@ public class Main {
     public static List<Person> list = new ArrayList<>();
     public static ArrayList<Subscriber> subscribers = new ArrayList<>();
     public static ArrayList<Backup> backups = new ArrayList<>();
-    private static RouterEnum routerEnum;
+    public static RouterEnum routerEnum;
     private static ServerSocket listenSocket;
     public static boolean waitingResponse = false;
     public static Request response;
@@ -29,7 +29,7 @@ public class Main {
 
     public static void main(String[] args) {
         routerEnum = RouterEnum.valueOf(args[0]);
-        new ListPersonView("Listagem "+routerEnum.description, list);
+//        ListPersonView.main(args);
         try{
             listenSocket = new ServerSocket(routerEnum.routerPort);
             acceptConnections();

@@ -51,5 +51,10 @@ public class ListPersonView extends JFrame{
         refreshTable();
     }
 
-
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            ListPersonView listPersonView = new ListPersonView("Listagem "+Backup.Main.routerEnum.description, Backup.Main.list);
+//            new BackupUpdateView(listPersonView);
+        });
+    }
 }

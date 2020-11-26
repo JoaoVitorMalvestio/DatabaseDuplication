@@ -1,18 +1,13 @@
 package Client.View;
 
-import Client.Main;
 import Models.Person;
-
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListPersonView extends JFrame{
     private JTable tablePerson;
-    private JPanel panel1;
+    private JPanel panelList;
     private JButton removerButton;
     private JButton alterarButton;
     private JButton atualizarButton;
@@ -21,8 +16,8 @@ public class ListPersonView extends JFrame{
     public ListPersonView(String title, List<Person> persons) {
         super(title);
 
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setContentPane(panel1);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setContentPane(panelList);
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -52,23 +47,14 @@ public class ListPersonView extends JFrame{
     }
 
     private void initializeTable(List<Person> persons){
-        tablePerson.setModel(new PersonTableModel());
-
         if (persons != null && persons.size() > 0){
             tablePerson.setModel(new PersonTableModel(persons));
         }
     }
 
     private void refreshTable(){
-        /*String personsString = Main.getListPerson();
-        List<Person> persons = Person.stringToList(personsString);*/
-
-        persons = new ArrayList<Person>();
-
-        tablePerson.setModel(new PersonTableModel());
-
         if (persons != null && persons.size() > 0){
-            tablePerson.setModel(new PersonTableModel(persons));
+            tablePerson.setModel(new PersonTableModel(Person.stringToList(Client.Main.getListPerson())));
         }
     }
 
@@ -80,7 +66,7 @@ public class ListPersonView extends JFrame{
         int option = JOptionPane.showConfirmDialog(null, "Deseja remover a pessoa '" + persons.get(selectedLine).getName() + "'?");
 
         if (option == 0){
-            //Main.removePerson(persons.get(selectedLine).getId());
+            Client.Main.removePerson(persons.get(selectedLine).getId());
             refreshTable();
         }
 

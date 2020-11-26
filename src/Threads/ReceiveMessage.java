@@ -1,6 +1,5 @@
 package Threads;
 
-import Client.Main;
 import Models.Request;
 import Enum.Operation;
 import java.io.DataInputStream;
@@ -9,7 +8,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 import Enum.RouterEnum;
-import Enum.ClientType;
 
 public class ReceiveMessage extends Thread {
 
@@ -26,15 +24,15 @@ public class ReceiveMessage extends Thread {
         try{
             while(!socket.isClosed()){
                 DataInputStream in = new DataInputStream(this.socket.getInputStream());
-                DataOutputStream out = new DataOutputStream(this.socket.getOutputStream());
                 String receive = in.readUTF();
                 Request request = new Request(receive);
                 if(request.getOperation() == Operation.RESPONSE){
                     Message.setWaitingFalseByType(request);
-                    return;
+                    continue;
                 }
-                Message.resolveByType(request, socket, RouterEnum.valueOf(request.getFrom()), RouterEnum.valueOf(request.getTo()));
-                out.writeUTF(Request.send(request.getType(), request.getAction(), request.getData(), request.getFrom(), request.getTo(), Operation.RESPONSE));
+                String data = Message.resolveByType(request, socket, RouterEnum.valueOf(request.getFrom()), RouterEnum.valueOf(request.getTo()));
+                DataOutputStream out = new DataOutputStream(this.socket.getOutputStream());
+                out.writeUTF(Request.send(request.getType(), request.getAction(), data, request.getFrom(), request.getTo(), Operation.RESPONSE));
             }
         }catch (SocketException e){
             if(e.getMessage().equals("Connection reset")){

@@ -79,8 +79,6 @@ public class Main {
     }
 
     public static String getListPerson() {
-        return "id=1$name=Joao$phone=999999999$address=Rua das alamedas$numberAddress=1234$zipCode=87047650$neighborhood=Jardim Paris$city=Maringa$state=PR";
-/*
         try {
             sockets.get(0).getSocketService().send(
                     Request.send(
@@ -92,26 +90,23 @@ public class Main {
                             Operation.REQUEST
                     )
             );
-
             waitingResponse = true;
             waiting();
             return response.getData();
-
         } catch (IOException e) {
             System.out.println("try catch client");
             e.printStackTrace();
         }
-
-        return "";*/
+        return "";
     }
 
-    public static void removePerson(Integer index){
+    public static void removePerson(Integer id){
         try {
             sockets.get(0).getSocketService().send(
                     Request.send(
                             ClientType.CLIENT,
-                            Action.INSERT,
-                            index.toString(),
+                            Action.DELETE,
+                            id.toString(),
                             routerEnum.name(),
                             sockets.get(0).getTo().name(),
                             Operation.REQUEST

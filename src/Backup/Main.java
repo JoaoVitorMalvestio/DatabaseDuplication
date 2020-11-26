@@ -15,14 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    private static RouterEnum routerEnum;
+    public static RouterEnum routerEnum;
     public static List<Person> list = new ArrayList<>();
     public static boolean waitingResponse = false;
     public static Request response;
 
     public static void main(String[] args) {
         routerEnum = RouterEnum.valueOf(args[0]);
-        new ListPersonView("Listagem "+routerEnum.description, list);
+//        ListPersonView.main(args);
         linkWithRouter();
     }
 

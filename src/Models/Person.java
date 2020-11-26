@@ -88,7 +88,7 @@ public class Person {
         this.state = state;
     }
 
-    public String encodePerson(){
+    String encodePerson(){
         String string = "";
 
         if(id != null){
@@ -166,7 +166,10 @@ public class Person {
 
     public static List<Person> stringToList(String stringList) {
         List<Person> persons = new ArrayList<>();
-
+        System.out.println("String to List: "+stringList);
+        if(stringList.equals("")){
+            return persons;
+        }
         String[] records = stringList.split("&&");
         int countRecords = records.length;
 

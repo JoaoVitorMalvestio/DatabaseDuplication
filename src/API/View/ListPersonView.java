@@ -40,8 +40,6 @@ public class ListPersonView extends JFrame{
     }
 
     public void refreshTable(){
-        tablePerson.setModel(new PersonTableModel());
-
         if (API.Main.list != null && API.Main.list.size() > 0){
             tablePerson.setModel(new PersonTableModel(API.Main.list));
         }
@@ -51,5 +49,10 @@ public class ListPersonView extends JFrame{
         refreshTable();
     }
 
-
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            ListPersonView listPersonView = new ListPersonView("Listagem "+API.Main.routerEnum.description, API.Main.list);
+//            new ApiUpdateView(listPersonView);
+        });
+    }
 }

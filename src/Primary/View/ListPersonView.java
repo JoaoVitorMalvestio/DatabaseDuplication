@@ -4,6 +4,7 @@ import Client.View.PersonTableModel;
 import Models.Person;
 import Threads.HotReloadTables.PrimaryUpdateView;
 import javax.swing.*;
+import java.time.LocalTime;
 import java.util.List;
 
 public class ListPersonView extends JFrame{
@@ -40,8 +41,6 @@ public class ListPersonView extends JFrame{
     }
 
     public void refreshTable(){
-        tablePerson.setModel(new PersonTableModel());
-
         if (Primary.Main.list != null && Primary.Main.list.size() > 0){
             tablePerson.setModel(new PersonTableModel(Primary.Main.list));
         }
@@ -51,5 +50,10 @@ public class ListPersonView extends JFrame{
         refreshTable();
     }
 
-
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            ListPersonView listPersonView = new ListPersonView("Listagem "+Primary.Main.routerEnum.description, Primary.Main.list);
+//            new PrimaryUpdateView(listPersonView);
+        });
+    }
 }

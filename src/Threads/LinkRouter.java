@@ -1,10 +1,8 @@
 package Threads;
 
-import Client.Main;
 import Enum.Operation;
 import Enum.RouterEnum;
 import Enum.Action;
-import Enum.ClientType;
 import Models.Request;
 import Service.SocketService;
 import java.io.DataOutputStream;
@@ -28,7 +26,6 @@ public class LinkRouter extends Thread {
         try {
             while (!socketService.isClosed()) {
                 request = new Request(socketService.receive());
-                DataOutputStream out = new DataOutputStream(socketService.getSocket().getOutputStream());
                 if (request.getOperation().equals(Operation.RESPONSE)) {
                     if (request.getAction() == Action.INITIALIZE) {
                         System.out.println("O socket " + to.description + " aceitou a conexão ");
@@ -37,9 +34,9 @@ public class LinkRouter extends Thread {
                     Message.setWaitingFalseByType(request);
                     continue;
                 }
-
-                Message.resolveByType(request, socketService.getSocket(), RouterEnum.valueOf(request.getTo()), RouterEnum.valueOf(request.getFrom()));
-                out.writeUTF(Request.send(request.getType(),request.getAction(),request.getData(),request.getFrom(),request.getTo(),Operation.RESPONSE));
+                String data = Message.resolveByType(request, socketService.getSocket(), RouterEnum.valueOf(request.getTo()), RouterEnum.valueOf(request.getFrom()));
+                DataOutputStream out = new DataOutputStream(socketService.getSocket().getOutputStream());
+                out.writeUTF(Request.send(request.getType(),request.getAction(),data,request.getFrom(),request.getTo(),Operation.RESPONSE));
             }
         } catch (IOException e) {
             System.out.println("O socket "+ this.to.description  + " se desconectou");

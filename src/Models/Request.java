@@ -4,7 +4,7 @@ import Enum.ClientType;
 import Enum.Operation;
 import Enum.Action;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class Request {
     private ClientType type;
@@ -72,6 +72,14 @@ public class Request {
             }
         }
         return person;
+    }
+
+    public static String encodeListData(List<Person> list){
+        String data = "";
+        for (Person person : list){
+            data = data.concat(person.encodePerson()+"&&");
+        }
+        return data;
     }
 
     public static String encodeData(Person person){
