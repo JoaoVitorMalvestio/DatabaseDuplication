@@ -22,6 +22,7 @@ public class ListPersonView extends JFrame{
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+
         tablePerson.setRowSelectionAllowed(true);
 
         initializeTable(persons);

@@ -1,8 +1,10 @@
 package Client.View;
 
+import Client.Main;
 import Models.Person;
 
 import javax.swing.*;
+import java.util.List;
 
 public class ActionsView extends JFrame {
     private JButton inserirNovaPessoaButton;
@@ -31,11 +33,15 @@ public class ActionsView extends JFrame {
         });
     }
 
-    private void inserirNovaPessoaButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void inserirNovaPessoaButtonMouseClicked(java.awt.event.MouseEvent evt) {
         new PersonView("Cadastrar nova pessoa", new Person());
     }
 
-    private void listarPessoasButtonButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        new ListPersonView("Lista de pessoas cadastradas", null);
+    private void listarPessoasButtonButtonMouseClicked(java.awt.event.MouseEvent evt) {
+        String personsString = Main.getListPerson();
+
+        List<Person> persons = Person.stringToList(personsString);
+
+        new ListPersonView("Lista de pessoas cadastradas", persons);
     }
 }

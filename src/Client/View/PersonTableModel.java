@@ -55,7 +55,7 @@ public class PersonTableModel  extends AbstractTableModel {
 
         switch (columnIndex) {
             case 0:
-                person.setId(Integer.valueOf(aValue.toString()));
+                person.setId(Integer.parseInt(aValue.toString()));
             case 1:
                 person.setName(aValue.toString());
         }
@@ -84,7 +84,7 @@ public class PersonTableModel  extends AbstractTableModel {
         return persons.get(index);
     }
 
-    public void addPerson (Person person) {
+    public void addPerson(Person person) {
         persons.add(person);
 
         int lastIndex;

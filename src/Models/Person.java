@@ -1,5 +1,7 @@
 package Models;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Person {
@@ -88,6 +90,7 @@ public class Person {
 
     public String encodePerson(){
         String string = "";
+
         if(id != null){
             string += ("id="+id.toString());
         }
@@ -140,6 +143,7 @@ public class Person {
             }
             string += ("state="+state);
         }
+
         return string;
     }
     private boolean needPutSeparator(String string){
@@ -159,6 +163,43 @@ public class Person {
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
                 '}';
+    }
+
+    public static List<Person> stringToList(String stringList) {
+        List<Person> persons = new ArrayList<>();
+
+        String[] records = stringList.split("&&");
+        int countRecords = records.length;
+
+        for (int i = 0; countRecords > i; i++){
+
+            String[] fields = records[i].split("\\$");
+            int countFields = fields.length;
+            Person person = new Person();
+
+            for (int j = 0; countFields > j; j++) {
+
+                String[] values = fields[j].split("=");
+                String attribute = values[0];
+                String value = values[1];
+
+                switch (attribute) {
+                    case "id": person.setId(Integer.parseInt(value)); break;
+                    case "name": person.setName(value); break;
+                    case "phone": person.setPhone(value); break;
+                    case "address": person.setAddress(value); break;
+                    case "numberAddress": person.setNumberAddress(value); break;
+                    case "zipCode": person.setZipCode(value); break;
+                    case "neighborhood": person.setNeighborhood(value); break;
+                    case "city": person.setCity(value); break;
+                    case "state": person.setState(value); break;
+                }
+            }
+
+            persons.add(person);
+        }
+
+        return persons;
     }
 
     public void generateId(){
