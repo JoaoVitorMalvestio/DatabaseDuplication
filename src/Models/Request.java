@@ -64,7 +64,7 @@ public class Request {
 
     public static Person decodeData(String data){
         Person person = new Person();
-        String[] stringFields = data.split("$");
+        String[] stringFields = data.split("\\$");
         for (String fields: stringFields) {
             String[] field = fields.split("=");
             if(field[0].equals("name")){

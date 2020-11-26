@@ -1,5 +1,6 @@
 package Backup;
 
+import Backup.View.ListPersonView;
 import Enum.RouterEnum;
 import Enum.ClientType;
 import Enum.Operation;
@@ -21,6 +22,7 @@ public class Main {
 
     public static void main(String[] args) {
         routerEnum = RouterEnum.valueOf(args[0]);
+        new ListPersonView("Listagem "+routerEnum.description, list);
         linkWithRouter();
     }
 

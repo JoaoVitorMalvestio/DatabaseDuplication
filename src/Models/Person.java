@@ -2,7 +2,7 @@ package Models;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import Primary.Main;
 
 public class Person {
 
@@ -95,7 +95,6 @@ public class Person {
             string += ("id="+id.toString());
         }
         if(name != null){
-            System.out.println(string);
             if(this.needPutSeparator(string)){
                 string += "$";
             }
@@ -172,37 +171,39 @@ public class Person {
         int countRecords = records.length;
 
         for (int i = 0; countRecords > i; i++){
-
-            String[] fields = records[i].split("\\$");
-            int countFields = fields.length;
-            Person person = new Person();
-
-            for (int j = 0; countFields > j; j++) {
-
-                String[] values = fields[j].split("=");
-                String attribute = values[0];
-                String value = values[1];
-
-                switch (attribute) {
-                    case "id": person.setId(Integer.parseInt(value)); break;
-                    case "name": person.setName(value); break;
-                    case "phone": person.setPhone(value); break;
-                    case "address": person.setAddress(value); break;
-                    case "numberAddress": person.setNumberAddress(value); break;
-                    case "zipCode": person.setZipCode(value); break;
-                    case "neighborhood": person.setNeighborhood(value); break;
-                    case "city": person.setCity(value); break;
-                    case "state": person.setState(value); break;
-                }
-            }
-
-            persons.add(person);
+            persons.add(Person.decodeData(records[i]));
         }
 
         return persons;
     }
 
+    public static Person decodeData(String data){
+        String[] fields = data.split("\\$");
+        Person person = new Person();
+
+        for (String field : fields) {
+
+            String[] values = field.split("=");
+            String attribute = values[0];
+            String value = values[1];
+
+            switch (attribute) {
+                case "id": person.setId(Integer.parseInt(value)); break;
+                case "name": person.setName(value); break;
+                case "phone": person.setPhone(value); break;
+                case "address": person.setAddress(value); break;
+                case "numberAddress": person.setNumberAddress(value); break;
+                case "zipCode": person.setZipCode(value); break;
+                case "neighborhood": person.setNeighborhood(value); break;
+                case "city": person.setCity(value); break;
+                case "state": person.setState(value); break;
+            }
+        }
+        return person;
+    }
+
     public void generateId(){
-        this.id = new Random().nextInt();
+        Main.count += 1;
+        this.id = Main.count;
     }
 }

@@ -6,6 +6,7 @@ import Models.Request;
 import Service.SocketService;
 import Threads.LinkRouter;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import Enum.Action;
 import Enum.RouterEnum;
@@ -21,9 +22,9 @@ public class Main {
     public static Request response;
 
     public static void main(String[] args) {
-        /*sockets = new ArrayList<>();
+        sockets = new ArrayList<>();
         routerEnum = RouterEnum.valueOf(args[0]);
-        linkWithRouter();*/
+        linkWithRouter();
 
         new ActionsView("DatabaseReplication");
 //        menu();
@@ -202,8 +203,12 @@ public class Main {
     }
 
     public static void waiting(){
+        LocalTime lastPrint = null;
         while (waitingResponse){
-
+            if(lastPrint == null || lastPrint.plusSeconds(1).isBefore(LocalTime.now())){
+                lastPrint = LocalTime.now();
+                System.out.println("Aguardando...");
+            }
         }
     }
 }

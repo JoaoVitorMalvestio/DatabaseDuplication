@@ -1,5 +1,6 @@
 package API;
 
+import API.View.ListPersonView;
 import Enum.RouterEnum;
 import Enum.ClientType;
 import Enum.Operation;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,13 +26,14 @@ public class Main {
     private static ServerSocket listenSocket;
     public static ArrayList<Client> clients = new ArrayList<>();
     public static Primary socketPrimary;
-    private static List<Person> list = new ArrayList<>();
+    public static List<Person> list = new ArrayList<>();
     public static boolean waitingResponse = false;
     public static Request response;
 
     public static void main(String[] args) {
+        routerEnum = RouterEnum.valueOf(args[0]);
+        new ListPersonView("Listagem "+routerEnum.description, list);
         try{
-            routerEnum = RouterEnum.valueOf(args[0]);
             listenSocket = new ServerSocket(routerEnum.routerPort);
             linkWithRouter();
             acceptConnections();
@@ -65,6 +68,15 @@ public class Main {
             }
         } catch(IOException e) {
             System.out.println("Listen:"+e.getMessage());
+        }
+    }
+    public static void waiting(){
+        LocalTime lastPrint = null;
+        while (waitingResponse){
+            if(lastPrint == null || lastPrint.plusSeconds(1).isBefore(LocalTime.now())){
+                lastPrint = LocalTime.now();
+                System.out.println("Aguardando...");
+            }
         }
     }
 }

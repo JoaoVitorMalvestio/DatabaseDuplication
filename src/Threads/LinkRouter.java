@@ -34,32 +34,11 @@ public class LinkRouter extends Thread {
                         System.out.println("O socket " + to.description + " aceitou a conexão ");
                         continue;
                     }
-                    if(RouterEnum.valueOf(request.getFrom()).type == ClientType.CLIENT){
-                        if(Main.waitingResponse){
-                            Main.response = request;
-                            Main.waitingResponse = false;
-                        }
-                    }
+                    Message.setWaitingFalseByType(request);
                     continue;
                 }
-                switch (request.getType()){
-                    case API:
-                        Message.resolveApi(request, socketService.getSocket(), RouterEnum.valueOf(request.getTo()), RouterEnum.valueOf(request.getFrom()));
-                        break;
-                    case PRIMARY:
-                        Message.resolvePrimary(request, socketService.getSocket(), RouterEnum.valueOf(request.getTo()), RouterEnum.valueOf(request.getFrom()));
-                        break;
-                    case BACKUP:
-                        Message.resolveBackup(request, socketService.getSocket(), RouterEnum.valueOf(request.getTo()), RouterEnum.valueOf(request.getFrom()));
-                        break;
-                    case CLIENT:
-                        Message.resolveClient(request, socketService.getSocket(), RouterEnum.valueOf(request.getTo()), RouterEnum.valueOf(request.getFrom()));
-                        break;
-                    default:
-                        System.out.println("[LINK-ROUTER] Mensagem não tratada");
-                        System.out.println(request);
-                        break;
-                }
+
+                Message.resolveByType(request, socketService.getSocket(), RouterEnum.valueOf(request.getTo()), RouterEnum.valueOf(request.getFrom()));
                 out.writeUTF(Request.send(request.getType(),request.getAction(),request.getData(),request.getFrom(),request.getTo(),Operation.RESPONSE));
             }
         } catch (IOException e) {

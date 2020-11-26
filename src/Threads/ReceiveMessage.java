@@ -1,5 +1,6 @@
 package Threads;
 
+import Client.Main;
 import Models.Request;
 import Enum.Operation;
 import java.io.DataInputStream;
@@ -25,31 +26,15 @@ public class ReceiveMessage extends Thread {
         try{
             while(!socket.isClosed()){
                 DataInputStream in = new DataInputStream(this.socket.getInputStream());
+                DataOutputStream out = new DataOutputStream(this.socket.getOutputStream());
                 String receive = in.readUTF();
                 Request request = new Request(receive);
                 if(request.getOperation() == Operation.RESPONSE){
-                    System.out.println("[Receive-Message] Response: "+request);
+                    Message.setWaitingFalseByType(request);
                     return;
                 }
-                switch (request.getType()){
-                    case API:
-                        Message.resolveApi(request, this.socket, RouterEnum.valueOf(request.getFrom()), RouterEnum.valueOf(request.getTo()));
-                        break;
-                    case PRIMARY:
-                        Message.resolvePrimary(request, this.socket, this.routerEnum, RouterEnum.valueOf(request.getFrom()));
-                        break;
-                    case BACKUP:
-                        Message.resolveBackup(request, this.socket, this.routerEnum, RouterEnum.valueOf(request.getFrom()));
-                        break;
-                    case CLIENT:
-                        Message.resolveClient(request, this.socket, RouterEnum.valueOf(request.getFrom()), RouterEnum.valueOf(request.getTo()));
-                        break;
-                    default:
-                        System.out.println(request);
-                        System.out.println("[RECEIVE-MESSAGE] Mensagem não tratada");
-                        break;
-                }
-                sendResponse(request);
+                Message.resolveByType(request, socket, RouterEnum.valueOf(request.getFrom()), RouterEnum.valueOf(request.getTo()));
+                out.writeUTF(Request.send(request.getType(), request.getAction(), request.getData(), request.getFrom(), request.getTo(), Operation.RESPONSE));
             }
         }catch (SocketException e){
             if(e.getMessage().equals("Connection reset")){
@@ -59,15 +44,6 @@ public class ReceiveMessage extends Thread {
             System.out.println("IOException");
             System.out.println(e.getMessage());
             System.out.println(e.getLocalizedMessage());
-        }
-    }
-    private void sendResponse(Request request){
-        DataOutputStream out;
-        try {
-            out = new DataOutputStream(this.socket.getOutputStream());
-            out.writeUTF(Request.send(request.getType(), request.getAction(), request.getData(), request.getFrom(), request.getTo(), Operation.RESPONSE));
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
