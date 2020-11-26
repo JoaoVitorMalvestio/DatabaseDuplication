@@ -51,7 +51,6 @@ public class PersonView extends JFrame {
                 btSalvarMouseClicked(evt);
             }
         });
-
         btFechar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btFecharMouseClicked(evt);
@@ -86,6 +85,12 @@ public class PersonView extends JFrame {
     private Person getPersonFromView(){
         Person person = new Person();
 
+        person.setId(null);
+
+        if (!fieldId.getText().equals("")){
+            person.setId(Integer.parseInt(fieldId.getText()));
+        }
+
         person.setName(fieldName.getText());
         person.setAddress(fieldAddress.getText());
         person.setCity(fieldCity.getText());
@@ -101,9 +106,14 @@ public class PersonView extends JFrame {
     private void btSalvarMouseClicked(java.awt.event.MouseEvent evt) {
         Person person = getPersonFromView();
 
-        Main.createPerson(person);
-
-        JOptionPane.showMessageDialog(null,"Pessoa adicionada com sucesso!");
+        if (person.getId() == null){
+            Main.createPerson(person);
+            JOptionPane.showMessageDialog(null,"Pessoa adicionada com sucesso!");
+        }
+        else {
+            Main.updatePerson(person);
+            JOptionPane.showMessageDialog(null,"Pessoa atualizada com sucesso!");
+        }
 
         this.setVisible(false);
     }

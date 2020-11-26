@@ -104,6 +104,46 @@ public class Main {
         return "";*/
     }
 
+    public static void removePerson(Integer index){
+        try {
+            sockets.get(0).getSocketService().send(
+                    Request.send(
+                            ClientType.CLIENT,
+                            Action.INSERT,
+                            index.toString(),
+                            routerEnum.name(),
+                            sockets.get(0).getTo().name(),
+                            Operation.REQUEST
+                    )
+            );
+            waitingResponse = true;
+            waiting();
+        } catch (IOException e) {
+            System.out.println("try catch client");
+            e.printStackTrace();
+        }
+    }
+
+    public static void updatePerson(Person person){
+        try {
+            sockets.get(0).getSocketService().send(
+                    Request.send(
+                            ClientType.CLIENT,
+                            Action.INSERT,
+                            Request.encodeData(person),
+                            routerEnum.name(),
+                            sockets.get(0).getTo().name(),
+                            Operation.REQUEST
+                    )
+            );
+            waitingResponse = true;
+            waiting();
+        } catch (IOException e) {
+            System.out.println("try catch client");
+            e.printStackTrace();
+        }
+    }
+
     public static boolean resolveInput(String option){
         if(option == null){
             JOptionPane.showMessageDialog(null, "Bye Bye...");
